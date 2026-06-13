@@ -37,7 +37,7 @@ export async function POST(req: Request) {
 
     if (dbError) {
       console.error("DB Error:", dbError);
-      return NextResponse.json({ error: 'Database error' }, { status: 500 });
+      return NextResponse.json({ error: 'Database error', details: dbError }, { status: 500 });
     }
 
     // 2. Fetch last 14 days of data for baseline
