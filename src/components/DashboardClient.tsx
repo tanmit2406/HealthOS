@@ -105,8 +105,8 @@ export default function DashboardClient({ metrics, insights }: { metrics: any[],
                 <YAxis yAxisId="right" orientation="right" stroke="#3b82f6" fontSize={12} />
                 <Tooltip contentStyle={{ backgroundColor: '#171717', borderColor: '#262626' }} />
                 <Legend />
-                <Line yAxisId="left" type="monotone" dataKey="hrv_avg" name="HRV (ms)" stroke="#ef4444" strokeWidth={2} dot={false} />
-                <Line yAxisId="right" type="monotone" dataKey="resting_heart_rate" name="Resting HR (bpm)" stroke="#3b82f6" strokeWidth={2} dot={false} />
+                <Line connectNulls={true} yAxisId="left" type="monotone" dataKey="hrv_avg" name="HRV (ms)" stroke="#ef4444" strokeWidth={2} dot={false} />
+                <Line connectNulls={true} yAxisId="right" type="monotone" dataKey="resting_heart_rate" name="Resting HR (bpm)" stroke="#3b82f6" strokeWidth={2} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -144,7 +144,7 @@ export default function DashboardClient({ metrics, insights }: { metrics: any[],
                 <Tooltip contentStyle={{ backgroundColor: '#171717', borderColor: '#262626', borderRadius: '8px' }} />
                 <Legend wrapperStyle={{ paddingTop: '20px' }} />
                 <Bar yAxisId="left" dataKey="active_calories" name="Active Cals" fill="#f97316" radius={[4, 4, 0, 0]} maxBarSize={40} />
-                <Line yAxisId="right" type="monotone" dataKey="weight" name="Weight (lbs/kg)" stroke="#10b981" strokeWidth={3} dot={{ r: 4, fill: '#10b981', strokeWidth: 0 }} />
+                <Line connectNulls={true} yAxisId="right" type="monotone" dataKey="weight" name="Weight (lbs/kg)" stroke="#10b981" strokeWidth={3} dot={{ r: 4, fill: '#10b981', strokeWidth: 0 }} />
               </ComposedChart>
             </ResponsiveContainer>
           </div>
