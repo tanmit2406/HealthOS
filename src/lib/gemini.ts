@@ -44,7 +44,7 @@ ${JSON.stringify(historicalData)}
     console.error("Gemini API Error:", error);
     return {
       readiness_score: 50,
-      summary_briefing: "Error generating insights today.",
+      summary_briefing: `Error generating insights today: ${error.message || JSON.stringify(error)}`,
       monthly_pattern_insight: "Not enough data for pattern analysis.",
       stress_analysis: "Data unavailable.",
       fitness_recommendation: "Take it easy today.",
