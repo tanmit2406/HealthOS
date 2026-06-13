@@ -50,13 +50,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Database error', details: dbError }, { status: 500 });
     }
 
-    // 2. Fetch last 14 days of data for baseline
+    // 2. Fetch last 30 days of data for baseline
     const { data: historicalData, error: histError } = await supabase
       .from('health_metrics')
       .select('*')
       .lt('date', date)
       .order('date', { ascending: false })
-      .limit(14);
+      .limit(30);
 
     if (histError) {
       console.error("History Error:", histError);
@@ -72,6 +72,7 @@ export async function POST(req: Request) {
         date,
         readiness_score: insights.readiness_score,
         summary_briefing: insights.summary_briefing,
+        monthly_pattern_insight: insights.monthly_pattern_insight,
         stress_analysis: insights.stress_analysis,
         fitness_recommendation: insights.fitness_recommendation,
         weight_trend_analysis: insights.weight_trend_analysis

@@ -8,6 +8,7 @@ Analyze this data and generate a JSON response strictly conforming to the follow
 {
   "readiness_score": 85,
   "summary_briefing": "Short string",
+  "monthly_pattern_insight": "Short string",
   "stress_analysis": "Short string",
   "fitness_recommendation": "Short string",
   "weight_trend_analysis": "Short string"
@@ -16,7 +17,7 @@ Analyze this data and generate a JSON response strictly conforming to the follow
 Today's Data:
 ${JSON.stringify(todayData)}
 
-Previous 14 Days Data:
+Previous 30 Days Data:
 ${JSON.stringify(historicalData)}
 `;
 
@@ -44,6 +45,7 @@ ${JSON.stringify(historicalData)}
     return {
       readiness_score: 50,
       summary_briefing: "Error generating insights today.",
+      monthly_pattern_insight: "Not enough data for pattern analysis.",
       stress_analysis: "Data unavailable.",
       fitness_recommendation: "Take it easy today.",
       weight_trend_analysis: "Data unavailable."

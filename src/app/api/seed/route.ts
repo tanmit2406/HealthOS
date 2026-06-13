@@ -36,6 +36,18 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: dbError.message }, { status: 500 });
     }
 
+    // Insert a dummy insight for today to populate the new UI immediately
+    const todayStr = new Date().toISOString().split('T')[0];
+    await supabase.from('daily_insights').upsert({
+      date: todayStr,
+      readiness_score: 88,
+      summary_briefing: "Good morning! Your mock data has been injected successfully.",
+      monthly_pattern_insight: "Over the last 30 days, your cardiovascular baseline has improved significantly. The days you hit 10,000+ steps correlated strongly with a +15% boost in deep sleep.",
+      stress_analysis: "Low stress indicated by stable HRV.",
+      fitness_recommendation: "Push hard today, you are fully recovered.",
+      weight_trend_analysis: "Stable over the last week."
+    });
+
     return NextResponse.json({ success: true, message: "Successfully injected 90 days of mock data! Check your dashboard." });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

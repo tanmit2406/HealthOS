@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend, ComposedChart } from 'recharts';
 import { Activity, Heart, Moon, Flame, Brain, Dumbbell, Scale } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 
@@ -57,25 +57,36 @@ export default function DashboardClient({ metrics, insights }: { metrics: any[],
 
         {/* Insight Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-neutral-900 p-5 rounded-2xl border border-neutral-800">
+          <div className="bg-neutral-900 p-5 rounded-2xl border border-neutral-800 hover:border-red-500/50 transition-colors">
             <h3 className="text-neutral-400 flex items-center gap-2 font-medium mb-3">
               <Heart className="w-5 h-5 text-red-400" /> Stress Analysis
             </h3>
             <p className="text-sm text-neutral-300">{latestInsight.stress_analysis || "No data"}</p>
           </div>
-          <div className="bg-neutral-900 p-5 rounded-2xl border border-neutral-800">
+          <div className="bg-neutral-900 p-5 rounded-2xl border border-neutral-800 hover:border-orange-500/50 transition-colors">
             <h3 className="text-neutral-400 flex items-center gap-2 font-medium mb-3">
               <Dumbbell className="w-5 h-5 text-orange-400" /> Fitness
             </h3>
             <p className="text-sm text-neutral-300">{latestInsight.fitness_recommendation || "No data"}</p>
           </div>
-          <div className="bg-neutral-900 p-5 rounded-2xl border border-neutral-800">
+          <div className="bg-neutral-900 p-5 rounded-2xl border border-neutral-800 hover:border-blue-500/50 transition-colors">
             <h3 className="text-neutral-400 flex items-center gap-2 font-medium mb-3">
               <Scale className="w-5 h-5 text-blue-400" /> Weight Trend
             </h3>
             <p className="text-sm text-neutral-300">{latestInsight.weight_trend_analysis || "No data"}</p>
           </div>
         </div>
+
+        {/* 30-Day Pattern Analysis */}
+        <section className="bg-neutral-900/50 rounded-2xl p-6 border border-neutral-800/50 backdrop-blur-sm relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+          <h2 className="text-xl font-semibold mb-3 flex items-center gap-2 text-indigo-300">
+            <Activity className="w-6 h-6" /> 30-Day Pattern Analysis
+          </h2>
+          <p className="text-lg leading-relaxed text-neutral-300 relative z-10">
+            {latestInsight.monthly_pattern_insight || "Analyzing your long-term patterns..."}
+          </p>
+        </section>
 
         {/* Charts Section */}
         <h2 className="text-2xl font-bold mt-12 mb-6">Trends</h2>
@@ -125,16 +136,16 @@ export default function DashboardClient({ metrics, insights }: { metrics: any[],
               <Flame className="w-4 h-4 text-orange-500" /> Active Calories & Weight
             </h3>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#262626" />
-                <XAxis dataKey="dateFormatted" stroke="#737373" fontSize={12} />
+              <ComposedChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#262626" vertical={false} />
+                <XAxis dataKey="dateFormatted" stroke="#737373" fontSize={12} tickMargin={10} />
                 <YAxis yAxisId="left" stroke="#f97316" fontSize={12} />
-                <YAxis yAxisId="right" orientation="right" stroke="#10b981" fontSize={12} domain={['dataMin - 2', 'dataMax + 2']} />
-                <Tooltip contentStyle={{ backgroundColor: '#171717', borderColor: '#262626' }} />
-                <Legend />
-                <Line yAxisId="left" type="monotone" dataKey="active_calories" name="Active Cals" stroke="#f97316" strokeWidth={2} dot={false} />
-                <Line yAxisId="right" type="monotone" dataKey="weight" name="Weight" stroke="#10b981" strokeWidth={2} dot={false} />
-              </LineChart>
+                <YAxis yAxisId="right" orientation="right" stroke="#10b981" fontSize={12} domain={['dataMin - 1', 'dataMax + 1']} />
+                <Tooltip contentStyle={{ backgroundColor: '#171717', borderColor: '#262626', borderRadius: '8px' }} />
+                <Legend wrapperStyle={{ paddingTop: '20px' }} />
+                <Bar yAxisId="left" dataKey="active_calories" name="Active Cals" fill="#f97316" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                <Line yAxisId="right" type="monotone" dataKey="weight" name="Weight (lbs/kg)" stroke="#10b981" strokeWidth={3} dot={{ r: 4, fill: '#10b981', strokeWidth: 0 }} />
+              </ComposedChart>
             </ResponsiveContainer>
           </div>
         </div>
