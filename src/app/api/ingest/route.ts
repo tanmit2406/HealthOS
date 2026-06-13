@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { generateDailyInsights } from '@/lib/gemini';
 
-export const maxDuration = 60; // Allow Vercel up to 60 seconds to wait for Gemini API
+export const runtime = 'edge'; // Use Edge runtime to avoid 10s hobby timeout
+
 
 export async function POST(req: Request) {
   try {
