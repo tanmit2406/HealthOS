@@ -35,10 +35,14 @@ ${JSON.stringify(historicalData)}
 
     const data = await response.json();
     
+    if (data.error) {
+      throw new Error(data.error.message || JSON.stringify(data.error));
+    }
+    
     if (data.candidates && data.candidates[0].content.parts[0].text) {
       return JSON.parse(data.candidates[0].content.parts[0].text);
     } else {
-      throw new Error("Invalid response from Gemini");
+      throw new Error(`Unexpected Gemini response: ${JSON.stringify(data)}`);
     }
   } catch (error: any) {
     console.error("Gemini API Error:", error);
