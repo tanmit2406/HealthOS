@@ -13,10 +13,20 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { date, ...metrics } = body;
+    const { date, ...rawMetrics } = body;
 
     if (!date) {
       return NextResponse.json({ error: 'Date is required' }, { status: 400 });
+    }
+
+    // Sanitize metrics: Convert empty strings from Shortcuts to null, and ensure numbers
+    const metrics: any = {};
+    for (const [key, value] of Object.entries(rawMetrics)) {
+      if (value !== "" && value !== null && value !== undefined && !isNaN(Number(value))) {
+        metrics[key] = Number(value);
+      } else {
+        metrics[key] = null;
+      }
     }
 
     // 1. Insert or update health metrics
