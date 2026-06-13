@@ -20,10 +20,20 @@ export async function POST(req: Request) {
     }
 
     // Sanitize metrics: Convert empty strings from Shortcuts to null, and ensure numbers
+    const integerColumns = [
+      'resting_heart_rate', 'sleep_deep_mins', 'sleep_core_mins', 'sleep_rem_mins',
+      'steps', 'active_calories', 'workout_duration_mins'
+    ];
+
     const metrics: any = {};
     for (const [key, value] of Object.entries(rawMetrics)) {
       if (value !== "" && value !== null && value !== undefined && !isNaN(Number(value))) {
-        metrics[key] = Number(value);
+        let numValue = Number(value);
+        if (integerColumns.includes(key)) {
+          metrics[key] = Math.round(numValue);
+        } else {
+          metrics[key] = Math.round(numValue * 100) / 100; // Round to 2 decimals
+        }
       } else {
         metrics[key] = null;
       }
