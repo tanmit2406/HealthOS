@@ -40,7 +40,7 @@ ${JSON.stringify(historicalData)}
     } else {
       throw new Error("Invalid response from Gemini");
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error("Gemini API Error:", error);
     return {
       readiness_score: 50,
