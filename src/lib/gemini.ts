@@ -1,7 +1,3 @@
-import { GoogleGenAI } from '@google/genai';
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
 export async function generateDailyInsights(todayData: any, historicalData: any[]) {
   const prompt = `
 You are a world-class sports scientist, physician, and health coach. 
@@ -10,33 +6,38 @@ Your client has provided you with their Apple Health data from yesterday, and th
 Analyze this data and generate a JSON response strictly conforming to the following structure. Do not output anything other than the JSON object.
 
 {
-  "readiness_score": integer (0-100, calculate based on HRV, resting heart rate, and sleep quality compared to baseline),
-  "summary_briefing": string (A short, personalized morning greeting and summary of their recovery),
-  "stress_analysis": string (An analysis of their physical stress levels, citing specific HRV/RHR numbers),
-  "fitness_recommendation": string (Actionable advice on what kind of workout they should do today based on readiness),
-  "weight_trend_analysis": string (A quick note on their weight vs active calories)
+  "readiness_score": 85,
+  "summary_briefing": "Short string",
+  "stress_analysis": "Short string",
+  "fitness_recommendation": "Short string",
+  "weight_trend_analysis": "Short string"
 }
 
 Today's Data:
-${JSON.stringify(todayData, null, 2)}
+${JSON.stringify(todayData)}
 
 Previous 14 Days Data:
-${JSON.stringify(historicalData, null, 2)}
+${JSON.stringify(historicalData)}
 `;
 
   try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-1.5-flash',
-      contents: prompt,
-      config: {
-        responseMimeType: 'application/json',
-      }
+    const response = await fetch(\`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=\${process.env.GEMINI_API_KEY}\`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { responseMimeType: "application/json" }
+      })
     });
 
-    if (response.text) {
-      return JSON.parse(response.text);
+    const data = await response.json();
+    
+    if (data.candidates && data.candidates[0].content.parts[0].text) {
+      return JSON.parse(data.candidates[0].content.parts[0].text);
     } else {
-      throw new Error("No text response from Gemini");
+      throw new Error("Invalid response from Gemini");
     }
   } catch (error) {
     console.error("Gemini API Error:", error);
@@ -49,3 +50,4 @@ ${JSON.stringify(historicalData, null, 2)}
     };
   }
 }
+
