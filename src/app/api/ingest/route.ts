@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { generateDailyInsights } from '@/lib/gemini';
 
+export const maxDuration = 60; // Allow Vercel up to 60 seconds to wait for Gemini API
+
 export async function POST(req: Request) {
   try {
     const authHeader = req.headers.get('authorization');
