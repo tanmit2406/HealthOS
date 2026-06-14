@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { generateDailyInsights } from '@/lib/gemini';
 
-export const runtime = 'edge'; // Use Edge runtime to avoid 10s hobby timeout
-
+export const maxDuration = 60; // Allow up to 60 seconds to prevent Gemini timeout
 
 export async function POST(req: Request) {
   try {
