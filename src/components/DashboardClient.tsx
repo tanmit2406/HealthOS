@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, ComposedChart } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, Bar, ComposedChart, CartesianGrid } from 'recharts';
 import { Sparkles, Brain, Moon, Activity, Flame, Heart, Dumbbell, Scale } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 
@@ -175,14 +175,25 @@ export default function DashboardClient({ metrics, insights }: { metrics: any[],
             </div>
             <div className="h-48 w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData}>
+                <AreaChart data={chartData}>
+                  <defs>
+                    <linearGradient id="colorHrv" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#ef4444" stopOpacity={0.5}/>
+                      <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="colorRhr" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.5}/>
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#171717" vertical={false} />
                   <XAxis dataKey="dateFormatted" hide />
                   <YAxis yAxisId="left" hide domain={['dataMin - 10', 'dataMax + 10']} />
                   <YAxis yAxisId="right" orientation="right" hide domain={['dataMin - 5', 'dataMax + 5']} />
                   <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#404040', strokeWidth: 1 }} />
-                  <Line connectNulls={true} yAxisId="left" type="monotone" dataKey="hrv_avg" name="HRV" stroke="#ef4444" strokeWidth={3} dot={false} activeDot={{ r: 6, fill: '#ef4444', strokeWidth: 0 }} />
-                  <Line connectNulls={true} yAxisId="right" type="monotone" dataKey="resting_heart_rate" name="RHR" stroke="#3b82f6" strokeWidth={3} dot={false} activeDot={{ r: 6, fill: '#3b82f6', strokeWidth: 0 }} />
-                </LineChart>
+                  <Area connectNulls={true} yAxisId="left" type="monotone" dataKey="hrv_avg" name="HRV" stroke="#ef4444" fillOpacity={1} fill="url(#colorHrv)" strokeWidth={3} activeDot={{ r: 6, fill: '#ef4444', strokeWidth: 0 }} />
+                  <Area connectNulls={true} yAxisId="right" type="monotone" dataKey="resting_heart_rate" name="RHR" stroke="#3b82f6" fillOpacity={1} fill="url(#colorRhr)" strokeWidth={3} activeDot={{ r: 6, fill: '#3b82f6', strokeWidth: 0 }} />
+                </AreaChart>
               </ResponsiveContainer>
             </div>
           </div>
@@ -202,12 +213,19 @@ export default function DashboardClient({ metrics, insights }: { metrics: any[],
             <div className="h-48 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart data={chartData}>
+                  <defs>
+                    <linearGradient id="colorWeight" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.4}/>
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#171717" vertical={false} />
                   <XAxis dataKey="dateFormatted" hide />
                   <YAxis yAxisId="left" hide />
                   <YAxis yAxisId="right" orientation="right" hide domain={['dataMin - 1', 'dataMax + 1']} />
                   <Tooltip content={<CustomTooltip />} cursor={{ fill: '#262626', opacity: 0.4 }} />
-                  <Bar yAxisId="left" dataKey="active_calories" name="Active Cals" fill="#38bdf8" radius={[4, 4, 0, 0]} maxBarSize={30} opacity={0.8} />
-                  <Line connectNulls={true} yAxisId="right" type="monotone" dataKey="weight" name="Weight" stroke="#10b981" strokeWidth={3} dot={false} activeDot={{ r: 6, fill: '#10b981', strokeWidth: 0 }} />
+                  <Bar yAxisId="left" dataKey="active_calories" name="Active Cals" fill="#38bdf8" radius={[4, 4, 0, 0]} maxBarSize={30} opacity={0.4} />
+                  <Area connectNulls={true} yAxisId="right" type="monotone" dataKey="weight" name="Weight" stroke="#10b981" fillOpacity={1} fill="url(#colorWeight)" strokeWidth={3} activeDot={{ r: 6, fill: '#10b981', strokeWidth: 0 }} />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
