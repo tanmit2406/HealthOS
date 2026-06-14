@@ -71,11 +71,12 @@ export async function POST(req: Request) {
       .upsert({
         date,
         readiness_score: insights.readiness_score,
-        summary_briefing: insights.summary_briefing,
-        monthly_pattern_insight: insights.monthly_pattern_insight,
-        stress_analysis: insights.stress_analysis,
-        fitness_recommendation: insights.fitness_recommendation,
-        weight_trend_analysis: insights.weight_trend_analysis
+        today_data_insight: insights.today_data_insight,
+        thirty_day_insight: insights.thirty_day_insight,
+        monthly_pattern_insight: insights.monthly_pattern_analysis,
+        stress_analysis: insights.monthly_stress_analysis,
+        fitness_recommendation: insights.monthly_fitness_recommendation,
+        weight_trend_analysis: insights.monthly_weight_trend
       });
 
     if (insightError) {

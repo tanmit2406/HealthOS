@@ -13,13 +13,15 @@ CRITICAL RULES REGARDING MISSING DATA:
 3. If a specific metric is missing, simply ignore it. Base your insights and recommendations entirely on the data that IS available (e.g., if weight is missing, talk about activity; if HRV is missing, talk about sleep). 
 4. Always maintain a confident, authoritative, and encouraging tone regardless of how little data is provided.
 
+REQUIRED JSON STRUCTURE:
 {
   "readiness_score": 85,
-  "summary_briefing": "Short string",
-  "monthly_pattern_insight": "Short string",
-  "stress_analysis": "Short string",
-  "fitness_recommendation": "Short string",
-  "weight_trend_analysis": "Short string"
+  "today_data_insight": "Analyze strictly the data from 'Today'. How did they do yesterday in terms of sleep, activity, and recovery? Provide an immediate tactical briefing.",
+  "thirty_day_insight": "Analyze strictly the 'Previous 30 Days Data'. What is the overarching theme or macro-trend of their last month?",
+  "monthly_pattern_analysis": "Identify specific recurring biological patterns over the last 30 days.",
+  "monthly_stress_analysis": "Analyze stress and HRV trends strictly based on the last 30 days.",
+  "monthly_fitness_recommendation": "Analyze fitness volume and give recommendations strictly based on the 30-day baseline.",
+  "monthly_weight_trend": "Analyze weight fluctuations strictly based on the last 30 days."
 }
 
 Today's Data:
@@ -50,11 +52,12 @@ ${JSON.stringify(historicalData)}
     
     return {
       readiness_score: 50,
-      summary_briefing: `Error generating insights today: ${error.message || JSON.stringify(error)}`,
-      monthly_pattern_insight: "Not enough data for pattern analysis.",
-      stress_analysis: "Data unavailable.",
-      fitness_recommendation: "Take it easy today.",
-      weight_trend_analysis: "Data unavailable."
+      today_data_insight: `Error generating insights today: ${error.message || JSON.stringify(error)}`,
+      thirty_day_insight: "Data unavailable.",
+      monthly_pattern_analysis: "Not enough data for pattern analysis.",
+      monthly_stress_analysis: "Data unavailable.",
+      monthly_fitness_recommendation: "Take it easy today.",
+      monthly_weight_trend: "Data unavailable."
     };
   }
 }

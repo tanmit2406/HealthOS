@@ -140,8 +140,8 @@ export default function DashboardClient({ metrics, insights }: { metrics: any[],
         </div>
 
         {/* AI Coach Interface */}
-        <section className="bg-neutral-900/40 rounded-3xl p-6 md:p-8 border border-neutral-800/50">
-          <div className="flex items-center gap-3 mb-6">
+        <section className="bg-neutral-900/40 rounded-3xl p-6 md:p-8 border border-neutral-800/50 space-y-6">
+          <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
@@ -151,10 +151,20 @@ export default function DashboardClient({ metrics, insights }: { metrics: any[],
             </div>
           </div>
           
-          <div className="bg-neutral-800/50 rounded-2xl rounded-tl-sm p-5 border border-neutral-700/30">
-            <p className="text-neutral-200 leading-relaxed text-[15px]">
-              {latestInsight.summary_briefing || "Waiting for your first daily sync."}
-            </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-neutral-800/50 rounded-2xl rounded-tl-sm p-5 border border-neutral-700/30">
+              <h3 className="text-neutral-400 text-xs font-bold uppercase tracking-wider mb-2">Today's Briefing</h3>
+              <p className="text-neutral-200 leading-relaxed text-[15px]">
+                {latestInsight.today_data_insight || latestInsight.summary_briefing || "Waiting for your first daily sync."}
+              </p>
+            </div>
+
+            <div className="bg-neutral-800/50 rounded-2xl p-5 border border-neutral-700/30">
+              <h3 className="text-neutral-400 text-xs font-bold uppercase tracking-wider mb-2">30-Day Macro Trend</h3>
+              <p className="text-neutral-200 leading-relaxed text-[15px]">
+                {latestInsight.thirty_day_insight || "Waiting for baseline data."}
+              </p>
+            </div>
           </div>
         </section>
 
