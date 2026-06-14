@@ -1,3 +1,5 @@
+import { GoogleGenAI } from '@google/genai';
+
 export async function generateDailyInsights(todayData: any, historicalData: any[]) {
   const prompt = `
 You are a world-class sports scientist, physician, and health coach. 
@@ -22,27 +24,19 @@ ${JSON.stringify(historicalData)}
 `;
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { responseMimeType: "application/json" }
-      })
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const response = await ai.models.generateContent({
+      model: 'gemini-1.5-flash',
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+      }
     });
 
-    const data = await response.json();
-    
-    if (data.error) {
-      throw new Error(data.error.message || JSON.stringify(data.error));
-    }
-    
-    if (data.candidates && data.candidates[0].content.parts[0].text) {
-      return JSON.parse(data.candidates[0].content.parts[0].text);
+    if (response.text) {
+      return JSON.parse(response.text);
     } else {
-      throw new Error(`Unexpected Gemini response: ${JSON.stringify(data)}`);
+      throw new Error(`Empty response from Gemini.`);
     }
   } catch (error: any) {
     console.error("Gemini API Error:", error);
@@ -56,4 +50,3 @@ ${JSON.stringify(historicalData)}
     };
   }
 }
-
