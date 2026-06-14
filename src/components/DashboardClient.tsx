@@ -139,14 +139,14 @@ export default function DashboardClient({ metrics, insights }: { metrics: any[],
 
         </div>
 
-        {/* Whoop Coach Interface */}
+        {/* AI Coach Interface */}
         <section className="bg-neutral-900/40 rounded-3xl p-6 md:p-8 border border-neutral-800/50">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-lg font-medium text-white">Whoop Coach</h2>
+              <h2 className="text-lg font-medium text-white">AI Coach</h2>
               <p className="text-xs text-neutral-500">Powered by Gemini 2.5 Flash</p>
             </div>
           </div>
