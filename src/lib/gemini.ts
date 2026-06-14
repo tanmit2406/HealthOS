@@ -25,6 +25,12 @@ ${JSON.stringify(historicalData)}
 
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    
+    // TEMPORARY DEBUG: Fetch available models
+    const debugResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${process.env.GEMINI_API_KEY}`);
+    const debugData = await debugResponse.json();
+    const modelList = debugData.models ? debugData.models.map((m: any) => m.name.replace('models/', '')).filter((n: string) => n.includes('gemini')).join(', ') : 'unknown';
+
     const response = await ai.models.generateContent({
       model: 'gemini-1.5-flash',
       contents: prompt,
@@ -40,9 +46,18 @@ ${JSON.stringify(historicalData)}
     }
   } catch (error: any) {
     console.error("Gemini API Error:", error);
+    
+    // Retrieve the models list if we caught an error
+    let availableModels = "";
+    try {
+      const debugResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${process.env.GEMINI_API_KEY}`);
+      const debugData = await debugResponse.json();
+      availableModels = debugData.models ? debugData.models.map((m: any) => m.name.replace('models/', '')).filter((n: string) => n.includes('gemini')).join(', ') : 'unknown';
+    } catch (e) {}
+
     return {
       readiness_score: 50,
-      summary_briefing: `Error generating insights today: ${error.message || JSON.stringify(error)}`,
+      summary_briefing: `Available models in 2026: ${availableModels}`,
       monthly_pattern_insight: "Not enough data for pattern analysis.",
       stress_analysis: "Data unavailable.",
       fitness_recommendation: "Take it easy today.",
