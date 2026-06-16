@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
     // Sanitize metrics: Convert empty strings from Shortcuts to null, and ensure numbers
     const integerColumns = [
-      'resting_heart_rate', 'sleep_deep_mins', 'sleep_core_mins', 'sleep_rem_mins',
+      'resting_heart_rate', 'sleep_deep_mins', 'sleep_core_mins', 'sleep_rem_mins', 'total_sleep_mins',
       'steps', 'active_calories', 'workout_duration_mins'
     ];
 

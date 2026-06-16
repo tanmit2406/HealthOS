@@ -67,7 +67,7 @@ export default function DashboardClient({ metrics, insights }: { metrics: any[],
   const strainColor = "text-sky-400";
 
   // 3. Calculate Sleep
-  const totalSleepMins = (latestMetric.sleep_core_mins || 0) + (latestMetric.sleep_deep_mins || 0) + (latestMetric.sleep_rem_mins || 0);
+  const totalSleepMins = latestMetric.total_sleep_mins || (latestMetric.sleep_core_mins || 0) + (latestMetric.sleep_deep_mins || 0) + (latestMetric.sleep_rem_mins || 0);
   const sleepTargetMins = 8 * 60; // 8 hours target
   const sleepProgress = Math.min(100, (totalSleepMins / sleepTargetMins) * 100);
   const sleepHours = Math.floor(totalSleepMins / 60);
