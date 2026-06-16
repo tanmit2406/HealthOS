@@ -85,6 +85,9 @@ export async function POST(req: Request) {
     // 3. Generate Insights with Gemini
     const insights = await generateDailyInsights({ date, ...metrics }, historicalData || []);
 
+    // TEMPORARY DEBUG FLAG
+    insights.summary_briefing = `RAW: ${JSON.stringify(rawMetrics)}`;
+
     // 4. Save Insights
     const { error: insightError } = await supabase
       .from('daily_insights')
