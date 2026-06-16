@@ -26,12 +26,33 @@ export async function POST(req: Request) {
 
     const metrics: any = {};
     for (const [key, value] of Object.entries(rawMetrics)) {
-      if (value !== "" && value !== null && value !== undefined && !isNaN(Number(value))) {
-        let numValue = Number(value);
-        if (integerColumns.includes(key)) {
-          metrics[key] = Math.round(numValue);
+      if (value !== "" && value !== null && value !== undefined) {
+        let strVal = String(value).toLowerCase();
+        
+        // Extract all numbers (including decimals). e.g. "28000 sec" -> 28000, "7.5 hr" -> 7.5
+        let extractedNum = strVal.replace(/[^\d.]/g, '');
+        let numValue = Number(extractedNum);
+
+        if (!isNaN(numValue) && extractedNum !== '') {
+          // If the shortcut passed seconds (e.g. 28000 sec), convert to minutes.
+          // Note: If they passed "7 hrs 30 mins", this simple regex squashes it to "730", which is wrong. 
+          // However, "Calculate Statistics" on Time usually outputs a single unit like seconds or minutes.
+          if (strVal.includes('sec')) {
+            numValue = numValue / 60;
+          } else if (strVal.includes('hr') || strVal.includes('hour')) {
+             // If it strictly says "7.5 hr" or similar
+             if (!strVal.includes('min')) {
+               numValue = numValue * 60;
+             }
+          }
+
+          if (integerColumns.includes(key)) {
+            metrics[key] = Math.round(numValue);
+          } else {
+            metrics[key] = Math.round(numValue * 100) / 100; // Round to 2 decimals
+          }
         } else {
-          metrics[key] = Math.round(numValue * 100) / 100; // Round to 2 decimals
+          metrics[key] = null;
         }
       } else {
         metrics[key] = null;
