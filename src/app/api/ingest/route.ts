@@ -94,6 +94,7 @@ export async function POST(req: Request) {
       .upsert({
         date,
         readiness_score: insights.readiness_score,
+        summary_briefing: insights.summary_briefing,
         today_data_insight: insights.today_data_insight,
         thirty_day_insight: insights.thirty_day_insight,
         monthly_pattern_insight: insights.monthly_pattern_analysis,
