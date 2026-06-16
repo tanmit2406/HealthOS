@@ -47,6 +47,11 @@ export async function POST(req: Request) {
           }
 
           if (integerColumns.includes(key)) {
+            // Failsafe: If Shortcuts returns seconds without the 'sec' label, it will be impossibly high
+            // There are only 1440 minutes in a day. If it's higher than that, it must be seconds.
+            if (key === 'total_sleep_mins' && numValue > 1440) {
+              numValue = numValue / 60;
+            }
             metrics[key] = Math.round(numValue);
           } else {
             metrics[key] = Math.round(numValue * 100) / 100; // Round to 2 decimals
